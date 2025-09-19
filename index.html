@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Galaxy Pets • Grow a Garden</title>
+  <meta name="description" content="Adopt pets with coins, level up, and redeem codes — galaxy themed." />
+  <meta property="og:title" content="Galaxy Pets — Grow a Garden" />
+  <meta property="og:description" content="Adopt pets with coins, level up, and redeem codes — galaxy themed." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://dummyimage.com/1200x630/0b0e22/e9f0ff&text=Galaxy+Pets" />
+  <link rel="icon" href="favicon.svg"/>
+  <style>
+    :root{
+      --card-bg: rgba(10, 12, 22, 0.7);
+      --card-bd: rgba(255,255,255,0.08);
+      --text: #e9f0ff;
+      --muted: #b6c3ff;
+      --primary: #8f7aff;
+      --accent: #00e5ff;
+      --hot: #ff6cfb;
+      --success: #66ffa6;
+      --warning: #ffd166;
+      --danger: #ff7b7b;
+      --glow: 0 0 24px rgba(143,122,255,0.5), 0 0 48px rgba(0,229,255,0.25);
+    }
+    [data-theme="nebula"]{ --primary:#a174ff; --accent:#7be3ff; --hot:#ff76d9; --card-bg: rgba(12,10,22,.75);}
+    [data-theme="aurora"]{ --primary:#6fe3a1; --accent:#a6c8ff; --hot:#ffd46f; --card-bg: rgba(8,18,18,.75);}
+    *{box-sizing:border-box}
+    html,body{height:100%;}
+    body{ margin:0; font-family: ui-rounded, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji"; color:var(--text); background:#050616; overflow-x:hidden; }
+    .bg{ position:fixed; inset:0; z-index:-2; background: radial-gradient(1200px 800px at 10% 20%, rgba(143,122,255,0.25), transparent 70%), radial-gradient(900px 700px at 80% 30%, rgba(0,229,255,0.22), transparent 60%), radial-gradient(700px 700px at 40% 80%, rgba(255,108,251,0.2), transparent 60%), linear-gradient(180deg, #050616 0%, #080a1a 60%, #0b0e22 100%); animation: floatHue 16s ease-in-out infinite alternate; filter: saturate(1.2); }
+    [data-theme="nebula"] .bg{ filter:saturate(1.3) hue-rotate(14deg); }
+    [data-theme="aurora"] .bg{ filter:saturate(1.25) hue-rotate(-20deg); }
+    @keyframes floatHue{ to{ filter: hue-rotate(20deg) saturate(1.35);} }
+    #stars{ position:fixed; inset:0; z-index:-1; pointer-events:none; }
+
+    header{ position:sticky; top:0; backdrop-filter:saturate(1.6) blur(10px); background:rgba(5,6,22,0.6); border-bottom:1px solid var(--card-bd);}
+    .wrap{ max-width:1100px; margin:0 auto; padding:16px 20px; }
+    .brand{ display:flex; align-items:center; gap:12px; font-weight:800; letter-spacing:0.5px; }
+    .brand .logo{ width:36px; height:36px; border-radius:10px; background: linear-gradient(135deg, var(--primary), var(--accent)); box-shadow: var(--glow); }
+    nav{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    .nav-link{ color:var(--text); text-decoration:none; padding:10px 14px; border:1px solid transparent; border-radius:999px; transition: all .2s ease; }
+    .nav-link:hover{ border-color:var(--accent); box-shadow:0 0 0 3px rgba(0,229,255,0.15); }
+    .cta{ background:linear-gradient(135deg,var(--accent),var(--primary)); color:#051018; font-weight:700; }
+    .user-pill{ margin-left:6px; font-size:12px; padding:6px 10px; border-radius:999px; background:rgba(255,255,255,0.06); border:1px solid var(--card-bd);}
+
+    main{ padding:26px 20px 80px; }
+    .hero{ display:grid; grid-template-columns: 1.2fr 0.8fr; gap:24px; align-items:center; }
+    @media (max-width: 880px){ .hero{ grid-template-columns:1fr; } }
+
+    .card{ background:var(--card-bg); border:1px solid var(--card-bd); border-radius:18px; box-shadow: var(--glow); }
+    .card.pad{ padding:20px; }
+    .title{ font-size:clamp(28px, 4vw, 46px); line-height:1.05; margin:0 0 12px; }
+    .subtitle{ color:var(--muted); margin:0 0 18px; }
+
+    .grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:16px; }
+    .btn{ display:inline-flex; align-items:center; gap:8px; padding:12px 16px; border-radius:12px; border:1px solid var(--card-bd); color:var(--text); text-decoration:none; transition:.2s; cursor:pointer; }
+    .btn:hover{ transform: translateY(-1px); box-shadow: var(--glow); }
+    .btn.ghost{ background:rgba(255,255,255,0.02); }
+    .btn.primary{ background:linear-gradient(135deg,var(--primary),var(--accent)); color:#09131e; font-weight:800; }
+
+    .pill{ display:inline-block; padding:6px 10px; border-radius:999px; background:rgba(255,255,255,0.06); border:1px solid var(--card-bd); color:var(--muted); font-size:12px; }
+
+    .section-title{ font-size:22px; margin:6px 0 14px; }
+
+    .list{ display:flex; flex-direction:column; gap:10px; }
+    .list-item{ display:flex; justify-content:space-between; align-items:center; padding:12px 14px; border-radius:14px; border:1px solid var(--card-bd); background:rgba(255,255,255,0.03); }
+    .price{ font-weight:900; color:var(--success); }
+
+    .note{ font-size:14px; color:var(--muted); }
+    footer{ border-top:1px solid var(--card-bd); padding:26px 20px; color:var(--muted); background:rgba(5,6,22,0.6); }
+    .sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+
+    form label{ display:block; font-size:14px; color:var(--muted); margin-bottom:6px;}
+    input[type=text], input[type=password], input[type=email]{ width:100%; padding:12px 12px; border-radius:12px; border:1px solid var(--card-bd); background:rgba(255,255,255,0.06); color:var(--text); }
+
+    .modal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.6); z-index:50; }
+    .modal.open{ display:flex; }
+    .modal-card{ width:min(520px, 92vw); background:var(--card-bg); border:1px solid var(--card-bd); border-radius:18px; box-shadow:var(--glow); padding:18px; }
+    .toast-wrap{ position:fixed; right:16px; bottom:16px; display:flex; flex-direction:column; gap:10px; z-index:60; }
+    .toast{ background:rgba(15,20,40,.95); color:var(--text); border:1px solid var(--card-bd); padding:12px 14px; border-radius:12px; min-width:240px; }
+  </style>
+</head>
+<body>
+  <div class="bg"></div>
+  <canvas id="stars" aria-hidden="true"></canvas>
+
+  <header>
+    <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; gap:16px;">
+      <div class="brand"><div class="logo" aria-hidden="true"></div> <span>Galaxy Pets</span></div>
+      <nav aria-label="Primary">
+        <a class="nav-link" href="#/">Home</a>
+        <a class="nav-link" href="#/buy-coins">Buy Coins</a>
+        <a class="nav-link" href="#/level-up">Level Up Your Pets</a>
+        <a class="nav-link" href="#/pets">View Pets</a>
+        <a class="nav-link" href="#/inventory">My Pets</a>
+        <a class="nav-link cta" href="#/limited">Limited Sale</a>
+        <a class="nav-link" href="#/account">Account</a>
+        <span id="userPill" class="user-pill" style="display:none;"></span>
+        <select id="themeSel" class="pill" onchange="setTheme(this.value)">
+          <option value="galaxy">Galaxy</option>
+          <option value="nebula">Nebula</option>
+          <option value="aurora">Aurora</option>
+        </select>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap" id="app" tabindex="-1"></main>
+  <div class="toast-wrap" id="toasts" aria-live="polite"></div>
+
+  <footer>
+    <div class="wrap">
+      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+        <span class="pill">Static • GitHub Pages Ready</span>
+        <span class="pill">Coins only (1 USD = 100 coins)</span>
+      </div>
+      <div class="note" style="margin-top:8px;">Accounts are demo-only and stored in your browser. Username uniqueness is enforced locally and checked globally via GitHub Issues when hosted on Pages.</div>
+    </div>
+  </footer>
+
+  <div id="purchaseModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="pmTitle">
+    <div class="modal-card">
+      <h3 id="pmTitle" class="section-title">Purchase</h3>
+      <p id="pmDesc" class="note">Confirm your purchase below.</p>
+      <div class="list" id="pmDetails"></div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
+        <button class="btn" onclick="closeModal()">Cancel</button>
+        <button class="btn primary" id="pmConfirm">Confirm & Checkout</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const DISCORD_SERVER_URL = "https://discord.gg/2uN27uSgjr";
+    const TICKET_INSTRUCTIONS = "After purchase, you'll be redirected to our Discord. Please create a ticket and include proof of purchase.";
+    const LEVEL_UP_PRICE_COINS = 500;
+
+    (function(){
+      const c = document.getElementById('stars'); const ctx = c.getContext('2d'); let w, h, stars;
+      function resize(){ w = c.width = innerWidth; h = c.height = innerHeight; makeStars(); }
+      function makeStars(){ const count = Math.min(250, Math.floor((w*h)/8000)); stars = Array.from({length: count}, ()=>({ x: Math.random()*w, y: Math.random()*h, z: Math.random()*0.8 + 0.2, s: Math.random()*1.2 + 0.2 })); }
+      function draw(){ ctx.clearRect(0,0,w,h); for(const st of stars){ const alpha = 0.5 + Math.sin((performance.now()/800)*st.z)*0.5; ctx.fillStyle = `rgba(${200+55*st.z|0}, ${210+30*st.z|0}, 255, ${0.25+0.55*alpha})`; ctx.beginPath(); ctx.arc(st.x, st.y, st.s, 0, Math.PI*2); ctx.fill(); } requestAnimationFrame(draw); }
+      addEventListener('resize', resize, {passive:true}); resize(); draw();
+    })();
+
+    const app = document.getElementById('app');
+    const routes = {
+      '/': homePage, '/buy-coins': buyCoinsPage, '/level-up': levelUpPage, '/pets': petsPage, '/inventory': inventoryPage, '/limited': limitedPage, '/account': accountPage, '/auth': authPage,
+    };
+    function renderRoute(){ const hash = location.hash.replace('#','') || '/'; const user = getUser(); if(!user && hash !== '/auth'){ location.hash = '#/auth'; return; } const view = routes[hash] || notFound; app.innerHTML = view(); renderUserPill(); initTheme(); app.focus({preventScroll:true}); }
+    addEventListener('hashchange', renderRoute); addEventListener('DOMContentLoaded', renderRoute);
+
+    function getUser(){ try{ return JSON.parse(localStorage.getItem('gp_user')||'null'); }catch(e){ return null; } }
+    function setUser(u){ localStorage.setItem('gp_user', JSON.stringify(u)); }
+    function clearUser(){ localStorage.removeItem('gp_user'); }
+    function getUsernames(){ try{ return JSON.parse(localStorage.getItem('gp_usernames')||'[]'); }catch(e){ return []; } }
+    function setUsernames(arr){ localStorage.setItem('gp_usernames', JSON.stringify(arr)); }
+    function getRedeems(){ try{ return JSON.parse(localStorage.getItem('gp_redeems')||'[]'); }catch(e){ return []; } }
+    function setRedeems(arr){ localStorage.setItem('gp_redeems', JSON.stringify(arr)); }
+
+    function toast(msg){ const t=document.createElement('div'); t.className='toast'; t.textContent=msg; const w=document.getElementById('toasts'); w.appendChild(t); setTimeout(()=>{ t.style.opacity='0'; setTimeout(()=>w.removeChild(t), 400); }, 2200); }
+
+    function initTheme(){ const sel=document.getElementById('themeSel'); const u=getUser(); const th=(u&&u.theme)||'galaxy'; document.documentElement.setAttribute('data-theme', th==='galaxy'?'':th); if(sel) sel.value=th; }
+    function setTheme(val){ const u=getUser(); if(!u) return; u.theme=val; setUser(u); initTheme(); toast('Theme set to '+val); }
+
+    function pagesRepoInfo(){ const host = location.host; const path = location.pathname.replace(/^\/|\/$/g, ''); const m = host.match(/^([^.]+)\.github\.io$/); if(!m) return null; const owner=m[1]; const repo = path.split('/')[0]||`${owner}.github.io`; return {owner,repo}; }
+    async function isUsernameTakenGlobal(username){ const info = pagesRepoInfo(); if(!info) return false; const q = encodeURIComponent(`repo:${info.owner}/${info.repo} is:issue in:title "${username}" label:user`); const url = `https://api.github.com/search/issues?q=${q}`; try{ const res=await fetch(url,{headers:{'Accept':'application/vnd.github+json'}}); if(!res.ok) return false; const data=await res.json(); return (data.total_count||0)>0; }catch(e){ return false; } }
+    function reserveUsernameIssueURL(username){ const info = pagesRepoInfo(); if(!info) return '#'; const title = encodeURIComponent(username); const labels=encodeURIComponent('user'); const body = encodeURIComponent(`Username reservation for @${username}\n\n(Submitted from Galaxy Pets site)`); return `https://github.com/${info.owner}/${info.repo}/issues/new?title=${title}&labels=${labels}&body=${body}`; }
+
+    const PETS = [
+      {id:'french-fry-ferret', name:'🍟 FRENCH FRY FERRET', coins:100, rarity:'Common'},
+      {id:'griffin', name:'🐦‍⬛ GRIFFIN', coins:100, rarity:'Common'},
+      {id:'cockitrice', name:'🐓 COCKITRICE', coins:100, rarity:'Common'},
+      {id:'golden-goose', name:'🐥 GOLDEN GOOSE', coins:100, rarity:'Common'},
+      {id:'corrupted-kitsune', name:'🟦 CORRUPTED KITSUNE', coins:100, rarity:'Common'},
+      {id:'dragon-fly', name:'🪙 DRAGON FLY', coins:200, rarity:'Uncommon'},
+      {id:'t-rex', name:'🦖 T REX', coins:200, rarity:'Uncommon'},
+      {id:'mimic', name:'🦑 MIMIC', coins:200, rarity:'Uncommon'},
+      {id:'butterfly', name:'🦋 BUTTERFLY', coins:600, rarity:'Rare'},
+      {id:'spino', name:'🟤🙇🏿 SPINO', coins:600, rarity:'Rare'},
+      {id:'fennec-fox', name:'🦊 FENNEC FOX', coins:800, rarity:'Epic'},
+      {id:'disco-bee', name:'🐝 DISCO BEE', coins:1200, rarity:'Epic'},
+      {id:'raccoon', name:'🦝 RACCOON', coins:1500, rarity:'Legendary'},
+      {id:'red-kit', name:'🟥 RED KIT', coins:2800, rarity:'Mythic'},
+    ];
+
+    let currentPurchase = null;
+    function openPurchaseModal(kind, payload){ currentPurchase = {kind, payload}; const modal = document.getElementById('purchaseModal'); const det = document.getElementById('pmDetails'); const title = document.getElementById('pmTitle'); const desc = document.getElementById('pmDesc'); if(kind==='pet'){ title.textContent = 'Adopt Pet'; desc.textContent = TICKET_INSTRUCTIONS; det.innerHTML = `<div class="list-item"><span>${payload.name}</span><span class="price">${payload.coins} coins</span></div>`; } else if(kind==='level'){ title.textContent = 'Level Up Pet'; desc.textContent = `Cost: ${LEVEL_UP_PRICE_COINS} coins. ${TICKET_INSTRUCTIONS}`; det.innerHTML = `<div class="list-item"><span>Level Up • ${payload.name} (Lv.${payload.level||1})</span><span class="price">${LEVEL_UP_PRICE_COINS} coins</span></div>`; } const confirm = document.getElementById('pmConfirm'); confirm.onclick = confirmPurchase; modal.classList.add('open'); }
+    function closeModal(){ document.getElementById('purchaseModal').classList.remove('open'); currentPurchase=null; }
+
+    function confirmPurchase(){ const u=getUser(); if(!u){ toast('Sign in first'); return; } if(!currentPurchase) return; if(currentPurchase.kind==='pet'){ const cost=currentPurchase.payload.coins; if((u.coins||0)<cost){ toast('Not enough coins'); return; } u.coins -= cost; u.inventory = u.inventory||[]; u.inventory.push({ id: currentPurchase.payload.id, name: currentPurchase.payload.name, coins: cost, acquiredAt: new Date().toISOString(), level:1 }); setUser(u); toast('Adopted ' + currentPurchase.payload.name + '!'); closeModal(); window.open(DISCORD_SERVER_URL, '_blank'); } else if(currentPurchase.kind==='level'){ if((u.coins||0)<LEVEL_UP_PRICE_COINS){ toast('Not enough coins'); return; } u.coins -= LEVEL_UP_PRICE_COINS; const inv = u.inventory||[]; const idx = inv.findIndex(p=>p.id===currentPurchase.payload.id); if(idx>=0){ inv[idx].level = (inv[idx].level||1)+1; } u.inventory = inv; setUser(u); toast('Level up successful!'); closeModal(); window.open(DISCORD_SERVER_URL, '_blank'); } renderRoute(); }
+
+    async function redeemCode(code){ code = (code||'').trim().toUpperCase(); if(!code){ toast('Enter a code'); return; } try{ const res = await fetch('codes.json', {cache:'no-store'}); if(!res.ok){ toast('Redeem temporarily unavailable'); return; } const codes = await res.json(); if(!(code in codes)){ toast('Invalid or used code'); return; } const amount = Number(codes[code]||0); let u = getUser(); if(!u){ toast('Sign in first'); return; } u.coins = (u.coins||0) + amount; setUser(u); const hist = getRedeems(); hist.push({code, amount, at:new Date().toISOString()}); setRedeems(hist); toast(`Redeemed ${amount} coins!`); renderRoute(); }catch(e){ toast('Error: '+e); } }
+
+    function renderUserPill(){ const u=getUser(); const pill=document.getElementById('userPill'); if(u){ pill.style.display='inline-block'; pill.textContent=`@${u.username} • ${u.coins} coins`; } else { pill.style.display='none'; } }
+    function chip(text){ return `<span class="pill">${text}</span>`; }
+    function btn(href, text, kind='ghost', attrs=''){ return `<a class="btn ${kind}" href="${href}" ${attrs}>${text}</a>`; }
+    function button(text, kind='ghost', onclick=''){ return `<button class="btn ${kind}" ${onclick?`onclick="${onclick}"`:''}>${text}</button>`; }
+
+    function authPage(){ const recent = getUsernames(); return `
+      <section class="grid">
+        <div class="card pad">
+          <h1 class="title">Enter Galaxy Pets</h1>
+          <p class="subtitle">Create an account or quick sign-in.</p>
+          <form onsubmit="return createAccount(event)">
+            <label>Username</label>
+            <input type="text" id="username" required placeholder="e.g., startraveler" />
+            <div style="height:10px;"></div>
+            <label>Email (optional)</label>
+            <input type="email" id="email" placeholder="you@example.com" />
+            <div style="height:10px;"></div>
+            <label>Password (optional)</label>
+            <input type="password" id="password" placeholder="••••••••" />
+            <div style="height:14px;"></div>
+            ${button('Create Account','primary')}
+          </form>
+          <div class="divider"></div>
+          <h3 class="section-title">Quick Sign-in</h3>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            ${recent.map(u=>button('@'+u,'ghost',`quickLogin('${u}')`)).join('') || '<div class="note">No saved usernames yet.</div>'}
+          </div>
+        </div>
+        <div class="card pad">
+          <h3 class="section-title">Username rules</h3>
+          <ul class="note" style="line-height:1.7;">
+            <li>3–20 chars; letters, numbers, underscore only.</li>
+            <li>Must be unique (local) and not reserved (best-effort global via GitHub Issues).</li>
+          </ul>
+        </div>
+      </section>
+    `; }
+
+    async function createAccount(e){ e.preventDefault(); const username = (document.getElementById('username').value||'').trim(); const email = (document.getElementById('email').value||'').trim(); const re = /^[a-zA-Z0-9_]{3,20}$/; if(!re.test(username)){ toast('Username must be 3–20 chars: letters, numbers, underscore only.'); return false; } const existing = getUsernames(); if(existing.includes(username.toLowerCase())){ toast('That username is already used on this device.'); return false; } const takenGlobal = await isUsernameTakenGlobal(username); if(takenGlobal){ toast('That username is reserved. Choose another.'); return false; } const user = { username, email, createdAt: new Date().toISOString(), coins: 0, inventory: [], theme:'galaxy' }; setUser(user); existing.push(username.toLowerCase()); setUsernames(existing); toast('Account created!'); location.hash = '#/'; return false; }
+    function quickLogin(name){ const existing = getUsernames(); if(!existing.includes(name.toLowerCase())){ toast('Saved account not found.'); return; } const u = getUser(); setUser({ username:name, email:'', createdAt:new Date().toISOString(), coins: (u&&u.coins)||0, inventory: (u&&u.inventory)||[], theme:(u&&u.theme)||'galaxy' }); toast('Signed in as @'+name); location.hash = '#/'; }
+
+    function homePage(){ const u = getUser(); return `
+      <section class="hero">
+        <div class="card pad">
+          <h1 class="title">Welcome, <span style="background:linear-gradient(135deg,var(--accent),var(--primary)); -webkit-background-clip:text; background-clip:text; color:transparent;">${u ? u.username : 'Explorer'}</span></h1>
+          <p class="subtitle">Adopt mythical companions, earn coins, and level up your pets — all under a neon night sky.</p>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            ${btn('#/buy-coins','Buy Coins','primary')}
+            ${btn('#/level-up','Level Up Your Pets')}
+            ${btn('#/pets','View Pets')}
+            ${btn('#/inventory','My Pets')}
+            ${btn('#/limited','Limited Sale')}
+          </div>
+          <div style="margin-top:16px; display:flex; gap:8px; flex-wrap:wrap;">
+            ${chip('Galaxy Theme')} ${chip('Redeem Codes')} ${chip('Inventory & Levels')}
+          </div>
+        </div>
+        <div class="card pad">
+          <h2 class="section-title">Quick Info</h2>
+          <div class="list">
+            <div class="list-item"><span>Coin Purchases</span><span class="price">Discord server</span></div>
+            <div class="list-item"><span>Level-Up Price</span><span class="price">500 coins</span></div>
+            <div class="list-item"><span>Limited Deal</span><span class="price">Any pet → Level 50 for 500 coins</span></div>
+          </div>
+        </div>
+      </section>
+    `; }
+
+    function buyCoinsPage(){ return `
+      <section class="grid">
+        <div class="card pad">
+          <h2 class="title" style="font-size:32px;">Buy Coins</h2>
+          <p class="subtitle">Click below to go to our Discord server. Create a ticket and include proof of purchase.</p>
+          <div class="list-item" style="gap:10px;">
+            <span>Discord</span>
+            <a class="btn primary" target="_blank" rel="noopener" href="https://discord.gg/2uN27uSgjr">Open Discord Server</a>
+          </div>
+          <div class="card pad" style="margin-top:12px;">
+            <h3 class="section-title">Redeem a Code</h3>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <input id="redeemInput" type="text" placeholder="Enter code (e.g., GPK-AB12)" style="flex:1; min-width:220px;" />
+              <button class="btn primary" onclick="redeemCode(document.getElementById('redeemInput').value)">Redeem</button>
+            </div>
+            <p class="note" style="margin-top:8px;">Codes are provided in Discord after payment is verified.</p>
+          </div>
+        </div>
+      </section>
+    `; }
+
+    function petsPage(){ const cards = PETS.map(p=>`
+      <div class="card pad">
+        <h3 class="section-title">${p.name}</h3>
+        <div class="list-item"><span>Rarity</span><span>${p.rarity}</span></div>
+        <div class="list-item"><span>Price</span><span class="price">${p.coins} coins</span></div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;">
+          ${button('Spend your coins','primary',`openPurchaseModal('pet', ${JSON.stringify(p).replace(/"/g,'&quot;')})`)}
+        </div>
+      </div>
+    `).join(''); return `<section class="grid">${cards}</section>`; }
+
+    function inventoryPage(){ const u=getUser(); const inv=(u&&u.inventory)||[]; if(!inv.length) return `<section class="card pad"><h2 class="section-title">My Pets</h2><p class="note">You have not adopted any pets yet.</p></section>`; const items = inv.map(p=>`
+      <div class="card pad">
+        <h3 class="section-title">${p.name} • Lv.${p.level||1}</h3>
+        <div class="list-item"><span>Adopted</span><span>${new Date(p.acquiredAt).toLocaleString()}</span></div>
+        <div class="list-item"><span>Level Up</span><span class="price">500 coins</span></div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;">
+          ${button('Level Up','primary',`openPurchaseModal('level', ${JSON.stringify(p).replace(/"/g,'&quot;')})`)}
+        </div>
+      </div>
+    `).join(''); return `<section class="grid">${items}</section>`; }
+
+    function levelUpPage(){ return `
+      <section class="card pad">
+        <h2 class="title" style="font-size:32px;">Level Up Your Pets</h2>
+        <p class="subtitle">Pick a pet from your inventory and spend <strong>500 coins</strong> to level it up.</p>
+        ${btn('#/inventory','Go to My Pets','primary')}
+      </section>
+    `; }
+
+    function accountPage(){ const u = getUser(); if(!u){ location.hash='#/auth'; return ''; } const info = pagesRepoInfo(); const reserveURL = info ? reserveUsernameIssueURL(u.username) : '#'; const redeems = getRedeems(); return `
+      <section class="grid">
+        <div class="card pad">
+          <h2 class="title" style="font-size:32px;">Your Account</h2>
+          <div class="list">
+            <div class="list-item"><span>Username</span><span>@${u.username}</span></div>
+            <div class="list-item"><span>Email</span><span>${u.email || '—'}</span></div>
+            <div class="list-item"><span>Coins</span><span class="price">${u.coins} coins</span></div>
+            <div class="list-item"><span>Created</span><span>${new Date(u.createdAt).toLocaleString()}</span></div>
+            ${info ? `<div class="list-item"><span>Reserve Username</span><a class="btn" target="_blank" rel="noopener" href="${reserveURL}">Open GitHub Issue</a></div>` : ''}
+          </div>
+          <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+            ${button('Log out','ghost','logout()')}
+            <a class="btn primary" target="_blank" rel="noopener" href="https://discord.gg/2uN27uSgjr">Open Discord Server</a>
+          </div>
+        </div>
+        <div class="card pad">
+          <h3 class="section-title">Redeem History</h3>
+          ${redeems.length? `<div class="list">${redeems.map(r=>`<div class="list-item"><span>${r.code}</span><span class="price">+${r.amount} coins</span></div>`).join('')}</div>` : '<p class="note">No redemptions yet.</p>'}
+        </div>
+      </section>
+    `; }
+
+    function notFound(){ return `<div class="card pad"><h2>Not Found</h2><p class="note">The page you’re looking for doesn’t exist. Try the navigation above.</p></div>`; }
+  </script>
+</body>
+</html>
